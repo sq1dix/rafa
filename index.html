@@ -2,13 +2,14 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Для Рафочки ❤️</title>
+  <title>Приветствие и данные</title>
   <style>
     body {
       background-color: #ffe6e6;
       font-family: 'Comic Sans MS', cursive;
       text-align: center;
       padding: 50px;
+      transition: background-color 0.6s;
     }
     .card {
       background-color: white;
@@ -17,6 +18,7 @@
       box-shadow: 0 0 20px rgba(0,0,0,0.2);
       max-width: 500px;
       margin: auto;
+      transition: opacity 0.5s;
     }
     h1 {
       color: #e60073;
@@ -24,14 +26,60 @@
     p {
       font-size: 18px;
     }
+    input, textarea {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>✊ Привет, Рафа! ❤️</h1>
-    <p>Давай хавтра не ко мне пойдем,а к Алану домоц он позвал меня и говорит Рафу тоже можешь взять,мы хотим сготовить там еду</p>
-    <p>Где то в 12,или в 11.</p>
-    <p>С уважением,твой Марсель </p>
+  <!-- Первая страница -->
+  <div id="page1" class="card">
+    <h1>Привет</h1>
+    <p>Ну ты попробуй значит найти тут че нить</p>
+    <p>Ну пробуй)</p>
+    <p><small>(Ну че?</small></p>
   </div>
+
+  <!-- Вторая страница -->
+  <div id="page2" class="card hidden">
+    <h1>пароль Skdfewk1232kdk</h1>
+    <input type="text" placeholder="Имя"><br>
+    <textarea rows="4" placeholder="Ваш комментарий"></textarea>
+    <p><small>хех</small></p>
+  </div>
+
+  <script>
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+    let current = 1;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' && current === 1) {
+        page1.classList.add('hidden');
+        page2.classList.remove('hidden');
+        document.body.style.backgroundColor = '#e6f7ff';
+        current = 2;
+      } else if (e.key === 'ArrowLeft' && current === 2) {
+        page2.classList.add('hidden');
+        page1.classList.remove('hidden');
+        document.body.style.backgroundColor = '#ffe6e6';
+        current = 1;
+      }
+    });
+  </script>
 </body>
 </html>
+
