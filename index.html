@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Приветствие и данные</title>
+  <title>Авторизация</title>
   <style>
     body {
       background-color: #ffe6e6;
@@ -23,16 +23,13 @@
     h1 {
       color: #e60073;
     }
-    p {
-      font-size: 18px;
-    }
-    input, textarea {
-      width: 80%;
+    input {
+      width: 70%;
       padding: 10px;
-      margin: 10px 0;
+      font-size: 18px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      font-size: 16px;
+      text-align: center;
     }
     .hidden {
       opacity: 0;
@@ -42,44 +39,45 @@
       left: 0;
       width: 100%;
     }
+    .error {
+      color: red;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
-  <!-- Первая страница -->
+  <!-- Первая страница (аутентификация) -->
   <div id="page1" class="card">
-    <h1>Привет</h1>
-    <p>Ну ты попробуй значит найти тут че нить</p>
-    <p>Ну пробуй)</p>
-    <p><small>(Ну че?</small></p>
+    <h1>Введите кодовое слово</h1>
+    <input id="inputCode" type="text" placeholder="Введите сюда"><br><br>
+    <p class="error" id="error"></p>
+    <p><small>Введите код и нажмите Enter</small></p>
   </div>
 
-  <!-- Вторая страница -->
+  <!-- Вторая страница (пароль) -->
   <div id="page2" class="card hidden">
-    <h1>пароль Skdfewk1232kdk</h1>
-    <input type="text" placeholder="Имя"><br>
-    <textarea rows="4" placeholder="Ваш комментарий"></textarea>
-    <p><small>хех</small></p>
+    <h1>Ваш пароль:XCdefwkjnedk23</h1>
+    <p style="font-size:22px; color:#0066cc; font-weight:bold;">Xdowfjmoi23</p>
   </div>
 
   <script>
+    const input = document.getElementById('inputCode');
     const page1 = document.getElementById('page1');
     const page2 = document.getElementById('page2');
-    let current = 1;
+    const error = document.getElementById('error');
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' && current === 1) {
-        page1.classList.add('hidden');
-        page2.classList.remove('hidden');
-        document.body.style.backgroundColor = '#e6f7ff';
-        current = 2;
-      } else if (e.key === 'ArrowLeft' && current === 2) {
-        page2.classList.add('hidden');
-        page1.classList.remove('hidden');
-        document.body.style.backgroundColor = '#ffe6e6';
-        current = 1;
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        if (input.value.trim().toUpperCase() === 'RAFAEL') {
+          // показать вторую страницу
+          page1.classList.add('hidden');
+          page2.classList.remove('hidden');
+          document.body.style.backgroundColor = '#e6f7ff';
+        } else {
+          error.textContent = 'Неверно!';
+        }
       }
     });
   </script>
 </body>
 </html>
-
