@@ -2,82 +2,132 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Авторизация</title>
+  <title>Конфиденциальный доступ</title>
   <style>
     body {
-      background-color: #ffe6e6;
-      font-family: 'Comic Sans MS', cursive;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0d0d0d;
+      color: #e6e6e6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .auth-container, .data-container {
+      background-color: #1a1a1a;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0, 255, 100, 0.2);
       text-align: center;
-      padding: 50px;
-      transition: background-color 0.6s;
+      width: 500px;
+      transition: all 0.4s ease;
     }
-    .card {
-      background-color: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-      max-width: 500px;
-      margin: auto;
-      transition: opacity 0.5s;
-    }
+
     h1 {
-      color: #e60073;
+      color: #00ff99;
+      margin-bottom: 20px;
     }
-    input {
-      width: 70%;
+
+    input[type="password"] {
+      width: 80%;
       padding: 10px;
-      font-size: 18px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+      border: none;
+      border-radius: 6px;
+      background-color: #2a2a2a;
+      color: white;
+      margin-bottom: 15px;
+      font-size: 16px;
       text-align: center;
     }
-    .hidden {
-      opacity: 0;
-      pointer-events: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
+
+    button {
+      padding: 10px 20px;
+      background-color: #00ff99;
+      border: none;
+      border-radius: 6px;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
     }
-    .error {
-      color: red;
-      font-size: 16px;
+
+    button:hover {
+      background-color: #00cc7a;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 15px;
+    }
+
+    th, td {
+      border: 1px solid #333;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #00ff99;
+      color: black;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <!-- Первая страница (аутентификация) -->
-  <div id="page1" class="card">
-    <h1>Введите кодовое слово</h1>
-    <input id="inputCode" type="text" placeholder="Введите сюда"><br><br>
-    <p class="error" id="error"></p>
-    <p><small>Введите код и нажмите Enter</small></p>
+
+  <div class="auth-container" id="auth">
+    <h1>Доступ ограничен</h1>
+    <p>Введите код авторизации:</p>
+    <input type="password" id="password" placeholder="Введите пароль...">
+    <br>
+    <button onclick="checkPassword()">Войти</button>
+    <p id="error" style="color: red; display: none;">Неверный пароль</p>
   </div>
 
-  <!-- Вторая страница (пароль) -->
-  <div id="page2" class="card hidden">
-    <h1>Ваш пароль:XCdefwkjnedk23</h1>
-    <p style="font-size:22px; color:#0066cc; font-weight:bold;">Xdowfjmoi23</p>
+  <div class="data-container hidden" id="data">
+    <h1>Секретная таблица</h1>
+    <table>
+      <tr><th>№</th><th>ФИО</th><th>Дата рождения</th></tr>
+      <tr><td>1</td><td>Абдуллаева Фарангиз Фуркат Кизи</td><td>26 февраля 2009</td></tr>
+      <tr><td>2</td><td>Абдумахамова Дилруза Икром Кизи</td><td>9 сентября 2009</td></tr>
+      <tr><td>3</td><td>Абдусаматова Нигина Зоир Кизи</td><td>11 июня 2009</td></tr>
+      <tr><td>4</td><td>Акмалова Арофатхон Асадуллоон Кизи</td><td>26 ноября 2009</td></tr>
+      <tr><td>5</td><td>Александрова Дарья Евгеньевна</td><td>18 июня 2009</td></tr>
+      <tr><td>6</td><td>Калиева Аселия Рустамовна</td><td>26 июня 2009</td></tr>
+      <tr><td>7</td><td>Колоскова Татьяна Сергеевна</td><td>15 октября 2009</td></tr>
+      <tr><td>8</td><td>Кондратьева Любовь Александровна</td><td>16 ноября 2008</td></tr>
+      <tr><td>9</td><td>Косенко Мария Станиславовна</td><td>8 апреля 2009</td></tr>
+      <tr><td>10</td><td>Мельникова Екатерина Константиновна</td><td>28 июля 2009</td></tr>
+      <tr><td>11</td><td>Нурматова Нигора Элмурод Кизи</td><td>11 февраля 2009</td></tr>
+      <tr><td>12</td><td>Тохирова Эътибор Музаффар Кизи</td><td>11 июня 2009</td></tr>
+      <tr><td>13</td><td>Тошбаева Ясмина Абдулхалик Кизи</td><td>28 марта 2009</td></tr>
+      <tr><td>14</td><td>Юнусова Зарема Марленовна</td><td>14 апреля 2009</td></tr>
+    </table>
   </div>
 
   <script>
-    const input = document.getElementById('inputCode');
-    const page1 = document.getElementById('page1');
-    const page2 = document.getElementById('page2');
-    const error = document.getElementById('error');
+    function checkPassword() {
+      const input = document.getElementById('password').value.trim();
+      const correct = "RAFAEL";
+      const auth = document.getElementById('auth');
+      const data = document.getElementById('data');
+      const error = document.getElementById('error');
 
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        if (input.value.trim().toUpperCase() === 'RAFAEL') {
-          // показать вторую страницу
-          page1.classList.add('hidden');
-          page2.classList.remove('hidden');
-          document.body.style.backgroundColor = '#e6f7ff';
-        } else {
-          error.textContent = 'Неверно!';
-        }
+      if (input === correct) {
+        auth.classList.add('hidden');
+        data.classList.remove('hidden');
+      } else {
+        error.style.display = "block";
       }
-    });
+    }
   </script>
+
 </body>
 </html>
