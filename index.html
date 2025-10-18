@@ -1,151 +1,258 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Secure Access Panel</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background-color: #0a0a0a;
-      color: #e6e6e6;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+<meta charset="UTF-8">
+<title>Secure Access System</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background-color: #000;
+    color: #00ff88;
+    font-family: Consolas, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
 
-    .container {
-      background-color: #141414;
-      border: 1px solid #00ff88;
-      border-radius: 10px;
-      box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
-      padding: 40px 50px;
-      text-align: center;
-      width: 500px;
-      transition: all 0.4s ease;
-    }
+  .container {
+    background-color: rgba(10, 10, 10, 0.95);
+    border: 1px solid #00ff88;
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
+    padding: 40px;
+    text-align: center;
+    width: 480px;
+    border-radius: 10px;
+  }
 
-    h1 {
-      color: #00ff88;
-      margin-bottom: 20px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
+  h1 {
+    color: #00ff88;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+  }
 
-    input {
-      width: 80%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 5px;
-      background-color: #222;
-      color: #fff;
-      font-size: 16px;
-      text-align: center;
-      outline: none;
-    }
+  input {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: #111;
+    color: #00ff88;
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+    box-shadow: inset 0 0 5px #00ff88;
+  }
 
-    button {
-      background-color: #00ff88;
-      color: #000;
-      border: none;
-      border-radius: 5px;
-      padding: 10px 25px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+  button {
+    background-color: #00ff88;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
 
-    button:hover {
-      background-color: #00cc6a;
-    }
+  button:hover {
+    background-color: #00cc6a;
+  }
 
-    .error {
-      color: red;
-      margin-top: 10px;
-      display: none;
-    }
+  .error {
+    color: red;
+    margin-top: 10px;
+    display: none;
+  }
 
-    .hidden {
-      display: none;
-    }
+  .hidden { display: none; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      color: #ddd;
-      font-size: 14px;
-    }
+  /* Сканирование */
+  #scanScreen {
+    text-align: center;
+    width: 500px;
+    border: 2px solid #00ff88;
+    border-radius: 10px;
+    box-shadow: 0 0 40px rgba(0,255,136,0.3);
+    padding: 30px;
+    animation: glow 2s infinite alternate;
+  }
 
-    th, td {
-      border: 1px solid #333;
-      padding: 8px;
-      text-align: left;
-    }
+  @keyframes glow {
+    from { box-shadow: 0 0 10px rgba(0,255,136,0.3); }
+    to { box-shadow: 0 0 30px rgba(0,255,136,0.8); }
+  }
 
-    th {
-      background-color: #00ff88;
-      color: #000;
-    }
+  .progress-bar {
+    width: 100%;
+    background-color: #111;
+    border-radius: 5px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
 
-    .data {
-      width: 80%;
-      margin: auto;
-    }
-  </style>
+  .progress {
+    height: 15px;
+    width: 0;
+    background-color: #00ff88;
+    transition: width 0.1s linear;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #00ff88;
+    font-size: 14px;
+    margin-top: 20px;
+  }
+
+  th, td {
+    border: 1px solid #00ff88;
+    padding: 6px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #00ff88;
+    color: #000;
+  }
+
+  .matrix-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at bottom, #001a00 0%, #000 100%);
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+</style>
 </head>
 <body>
 
-  <!-- Авторизация -->
-  <div class="container" id="loginPanel">
-    <h1>СЕКРЕТНЫЙ ВХОД</h1>
-    <input type="text" id="login" placeholder="Логин"><br>
-    <input type="password" id="password" placeholder="Пароль"><br>
-    <button onclick="authorize()">Войти</button>
-    <p class="error" id="errorMsg">Неверный логин или пароль</p>
+<div class="matrix-bg">
+  <canvas id="matrix"></canvas>
+</div>
+
+<!-- Авторизация -->
+<div class="container" id="loginPanel">
+  <h1>🔒 SECURE ACCESS</h1>
+  <input type="text" id="login" placeholder="Логин"><br>
+  <input type="password" id="password" placeholder="Пароль"><br>
+  <button onclick="authorize()">Войти</button>
+  <p class="error" id="errorMsg">Ошибка: неверный логин или пароль</p>
+</div>
+
+<!-- Сканирование -->
+<div id="scanScreen" class="hidden">
+  <h1>СКАНИРОВАНИЕ...</h1>
+  <div class="progress-bar">
+    <div class="progress" id="progress"></div>
   </div>
+  <p id="scanText">Проверка биометрии...</p>
+</div>
 
-  <!-- Секретные данные -->
-  <div class="container hidden" id="dataPanel">
-    <h1>ДОСТУП РАЗРЕШЁН</h1>
-    <div class="data">
-      <table>
-        <tr><th>№</th><th>ФИО</th><th>Дата рождения</th></tr>
-        <tr><td>1</td><td>Абдуллаева Фарангиз Фуркат Кизи</td><td>26 февраля 2009</td></tr>
-        <tr><td>2</td><td>Абдумахамова Дилруза Икром Кизи</td><td>9 сентября 2009</td></tr>
-        <tr><td>3</td><td>Абдусаматова Нигина Зоир Кизи</td><td>11 июня 2009</td></tr>
-        <tr><td>4</td><td>Акмалова Арофатхон Асадуллоон Кизи</td><td>26 ноября 2009</td></tr>
-        <tr><td>5</td><td>Александрова Дарья Евгеньевна</td><td>18 июня 2009</td></tr>
-        <tr><td>6</td><td>Калиева Аселия Рустамовна</td><td>26 июня 2009</td></tr>
-        <tr><td>7</td><td>Колоскова Татьяна Сергеевна</td><td>15 октября 2009</td></tr>
-        <tr><td>8</td><td>Кондратьева Любовь Александровна</td><td>16 ноября 2008</td></tr>
-        <tr><td>9</td><td>Косенко Мария Станиславовна</td><td>8 апреля 2009</td></tr>
-        <tr><td>10</td><td>Мельникова Екатерина Константиновна</td><td>28 июля 2009</td></tr>
-        <tr><td>11</td><td>Нурматова Нигора Элмурод Кизи</td><td>11 февраля 2009</td></tr>
-        <tr><td>12</td><td>Тохирова Эътибор Музаффар Кизи</td><td>11 июня 2009</td></tr>
-        <tr><td>13</td><td>Тошбаева Ясмина Абдулхалик Кизи</td><td>28 марта 2009</td></tr>
-        <tr><td>14</td><td>Юнусова Зарема Марленовна</td><td>14 апреля 2009</td></tr>
-      </table>
-    </div>
-  </div>
+<!-- Таблица -->
+<div class="container hidden" id="dataPanel">
+  <h1>✅ ДОСТУП ПОДТВЕРЖДЁН</h1>
+  <table>
+    <tr><th>№</th><th>ФИО</th><th>Дата рождения</th></tr>
+    <tr><td>1</td><td>Абдуллаева Фарангиз Фуркат Кизи</td><td>26 февраля 2009</td></tr>
+    <tr><td>2</td><td>Абдумахамова Дилруза Икром Кизи</td><td>9 сентября 2009</td></tr>
+    <tr><td>3</td><td>Абдусаматова Нигина Зоир Кизи</td><td>11 июня 2009</td></tr>
+    <tr><td>4</td><td>Акмалова Арофатхон Асадуллоон Кизи</td><td>26 ноября 2009</td></tr>
+    <tr><td>5</td><td>Александрова Дарья Евгеньевна</td><td>18 июня 2009</td></tr>
+    <tr><td>6</td><td>Калиева Аселия Рустамовна</td><td>26 июня 2009</td></tr>
+    <tr><td>7</td><td>Колоскова Татьяна Сергеевна</td><td>15 октября 2009</td></tr>
+    <tr><td>8</td><td>Кондратьева Любовь Александровна</td><td>16 ноября 2008</td></tr>
+    <tr><td>9</td><td>Косенко Мария Станиславовна</td><td>8 апреля 2009</td></tr>
+    <tr><td>10</td><td>Мельникова Екатерина Константиновна</td><td>28 июля 2009</td></tr>
+    <tr><td>11</td><td>Нурматова Нигора Элмурод Кизи</td><td>11 февраля 2009</td></tr>
+    <tr><td>12</td><td>Тохирова Эътибор Музаффар Кизи</td><td>11 июня 2009</td></tr>
+    <tr><td>13</td><td>Тошбаева Ясмина Абдулхалик Кизи</td><td>28 марта 2009</td></tr>
+    <tr><td>14</td><td>Юнусова Зарема Марленовна</td><td>14 апреля 2009</td></tr>
+  </table>
+</div>
 
-  <script>
-    function authorize() {
-      const login = document.getElementById('login').value.trim();
-      const pass = document.getElementById('password').value.trim();
-      const errorMsg = document.getElementById('errorMsg');
+<script>
+  // === Авторизация ===
+  function authorize() {
+    const login = document.getElementById('login').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    const errorMsg = document.getElementById('errorMsg');
 
-      if (login === "RAFAEL" && pass === "Zfdkw12") {
-        document.getElementById('loginPanel').classList.add('hidden');
-        document.getElementById('dataPanel').classList.remove('hidden');
-      } else {
-        errorMsg.style.display = "block";
-      }
+    if (login === "RAFAEL" && pass === "Zfdkw12") {
+      document.getElementById('loginPanel').classList.add('hidden');
+      document.getElementById('scanScreen').classList.remove('hidden');
+      startScan();
+    } else {
+      errorMsg.style.display = "block";
     }
-  </script>
+  }
+
+  // === Сканирование ===
+  function startScan() {
+    let progress = 0;
+    const bar = document.getElementById('progress');
+    const text = document.getElementById('scanText');
+    const scan = document.getElementById('scanScreen');
+
+    const interval = setInterval(() => {
+      progress += 2;
+      bar.style.width = progress + "%";
+
+      if (progress < 40) text.textContent = "Проверка биометрии...";
+      else if (progress < 70) text.textContent = "Синхронизация данных...";
+      else if (progress < 90) text.textContent = "Подтверждение ключа доступа...";
+      else text.textContent = "Завершение...";
+
+      if (progress >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          scan.classList.add('hidden');
+          document.getElementById('dataPanel').classList.remove('hidden');
+        }, 600);
+      }
+    }, 120);
+  }
+
+  // === Матрица-анимация ===
+  const canvas = document.getElementById('matrix');
+  const ctx = canvas.getContext('2d');
+
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+
+  const chars = "01";
+  const fontSize = 14;
+  const columns = canvas.width / fontSize;
+  const drops = Array(Math.floor(columns)).fill(1);
+
+  function draw() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#00ff88";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = chars.charAt(Math.floor(Math.random() * chars.length));
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+        drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  setInterval(draw, 33);
+</script>
 
 </body>
 </html>
